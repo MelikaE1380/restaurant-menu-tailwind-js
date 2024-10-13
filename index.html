@@ -5,14 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./assets/css/style.css">
     <title>Restaurant-Menu</title>
 
 
 <style>
 
-#shopping_cart_div1::-webkit-scrollbar{
+#cart-box::-webkit-scrollbar{
     display: none;
 
+}
+
+#products-box::-webkit-scrollbar{
+    display: none;
 }
 
 </style>
@@ -38,13 +43,13 @@
 
     <main class="w-full flex flex-col md:flex-row md:h-[calc(100vh-140px)] md:absolute md:top-[140px] ">
 
-        <div id="" class="w-full overflow-y-auto h-[450px] bg-green-100 md:h-full md:w-[60%] md:rounded-tl-[70px] lg:w-[75%]">
+        <div id="products-box" class="w-full flex flex-row flex-wrap justify-center items-center gap-5 pb-[40px] overflow-y-auto h-[450px] bg-white md:h-full md:w-[60%] md:rounded-tl-[70px] lg:w-[75%]">
 
         </div>
 
         <div id="shopping_cart" class="w-full bg-[#b4b4b4] md:h-full md:w-[40%] lg:w-[25%]">
 
-            <div id="shopping_cart_div1"
+            <div id="cart-box"
                 class="w-full h-[100px] overflow-y-auto bg-gradient-to-r from-[#FFAF10] to-[#FFCD44] flex flex-col justify-center items-center md:h-[20%]">
 
                 <div><svg width="50px" height="50px " viewBox="0 0 16 16" fill="none"
@@ -60,7 +65,7 @@
 
             </div>
 
-            <div id="shopping_cart_div2" class="flex flex-col items-center bg-[#402F88] md:h-[80%]">
+            <div id="shopping_cart_factor" class="flex flex-col items-center bg-[#402F88] md:h-[80%]">
 
                 <div class="w-full flex justify-center items-center">
                     <p class="text-white font-bold text-xl">Discount code?</p>
@@ -117,12 +122,10 @@
 
 
 
-
-
-
-
-
     </main>
+
+
+    <script src="./assets/js/script.js"></script>
 
 </body>
 
