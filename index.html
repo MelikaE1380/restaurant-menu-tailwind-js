@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Restaurant-Menu</title>
+
+
+<style>
+
+#shopping_cart_div1::-webkit-scrollbar{
+    display: none;
+
+}
+
+</style>
+
+
+
+</head>
+
+<body class="md:relative">
+
+
+    <header
+        class="w-full h-[80px] bg-[#4F3D9C] flex justify-around gap-3 items-center text-2xl text-white font-bold md:text-3xl md:justify-between md:w-full md:h-[210px] md:items-start md:pl-[3%] lg:pl-[20%]">
+
+        <div class="w-[100px] md:w-[300px] md:pt-[50px]">
+            <p>EAT HEALTHY</p>
+        </div>
+        <div class="w-[100px] md:w-[300px] md:pt-[50px]">
+            <p>LIVE HEALTHY</p>
+        </div>
+        <div class="hidden h-[80px] md:block md:w-[40%] lg:w-[25%]"></div>
+    </header>
+
+    <main class="w-full flex flex-col md:flex-row md:h-[calc(100vh-140px)] md:absolute md:top-[140px] ">
+
+        <div id="" class="w-full overflow-y-auto h-[450px] bg-green-100 md:h-full md:w-[60%] md:rounded-tl-[70px] lg:w-[75%]">
+
+        </div>
+
+        <div id="shopping_cart" class="w-full bg-[#b4b4b4] md:h-full md:w-[40%] lg:w-[25%]">
+
+            <div id="shopping_cart_div1"
+                class="w-full h-[100px] overflow-y-auto bg-gradient-to-r from-[#FFAF10] to-[#FFCD44] flex flex-col justify-center items-center md:h-[20%]">
+
+                <div><svg width="50px" height="50px " viewBox="0 0 16 16" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M0 1H15V10H4.60087L4.17982 12H12C13.1046 12 14 12.8954 14 14C14 15.1046 13.1046 16 12 16C10.8954 16 10 15.1046 10 14H6C6 15.1046 5.10457 16 4 16C2.89543 16 2 15.1046 2 14V12.6459L2.98262 7.97846L2.15287 3H0V1Z"
+                            fill="#402F88" />
+                    </svg></div>
+
+                <div class="flex flex-row justify-center items-center">
+                    <p class="text-[#402F88] font-bold text-[16px]">Your shopping cart is empty!</p>
+                </div>
+
+            </div>
+
+            <div id="shopping_cart_div2" class="flex flex-col items-center bg-[#402F88] md:h-[80%]">
+
+                <div class="w-full flex justify-center items-center">
+                    <p class="text-white font-bold text-xl">Discount code?</p>
+
+                </div>
+
+                <div class="w-[200px] h-[40px] flex items-center relative px-1.5">
+
+                    <input type="text" placeholder="code"
+                        class="w-[200px] h-[40px] rounded-[2rem] pl-[10px] focus:outline-none focus:ring-0">
+
+                    <div
+                        class="w-[40px] h-[40px] bg-[#FFA600] flex justify-center items-center rounded-r-[2rem] absolute right-0">
+
+                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#FFFFFF" stroke-width="3.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+
+
+                </div>
+
+                <div
+                    class="w-[65%] h-[120px] mt-[15px] bg-white font-bold text-[#333333] text-lg rounded-[50rem] flex flex-col justify-center items-center md:w-[85%]">
+                    <!--   قیمت -->
+
+                    <p>Price:<span>0.00 $</span></p>
+                    <p>Taxes:<span>0.00 $</span></p>
+                    <p>Discount:<span>0.00 $</span></p>
+                </div>
+
+
+                <div class="flex items-center mt-[20px]">
+                    <span class="text-white text-2xl font-bold">Total:</span><span
+                        class="text-2xl font-bold text-[#76FF71]">0.00$</span>
+
+                </div>
+
+                <div class="flex justify-center items-center w-[100%] mt-[20px]">
+
+                    <div
+                        class="w-[70%] h-[40px] bg-[#FFA600] mb-[35px] bg-[#FFA600] rounded-[50rem] flex justify-center items-center text-[#333333] font-bold text-xl">
+                        <p>Place Order</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
+    </main>
+
+</body>
+
+</html>
