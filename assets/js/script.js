@@ -16,6 +16,22 @@ let foodScoreModal = document.getElementById("food_score");
 
 let numEachFoodModal = document.getElementById("num_each_food");
 
+let priceBeforeDiscount = document.getElementById("price_before_discount");
+
+let taxPrice = document.getElementById("tax_price");
+
+let discountCodes = [
+    {
+    code:"golden",
+    percent: 60
+},
+
+{
+    code:"silver",
+    percent: 60
+}
+
+];
 
 let productList = [];
 
@@ -25,16 +41,17 @@ let currentFoodId;
 
 
 
-function syncCartToLocalStorage(){   //هرجایی که سبد خرید تغییر میکنه باید صدا زده بشه
-    
-    localStorage.setItem('cart',JSON.stringify(cart));
+
+function syncCartToLocalStorage() {   //هرجایی که سبد خرید تغییر میکنه باید صدا زده بشه
+
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 
-function syncLocalStorageToCart(){  //لحظه ای که سایت باز میشه نیازه که اجرا بشه
+function syncLocalStorageToCart() {  //لحظه ای که سایت باز میشه نیازه که اجرا بشه
     const temp = localStorage.getItem('cart');
 
-    if (temp){
+    if (temp) {
         cart = JSON.parse(temp);
     }
 }
@@ -43,15 +60,20 @@ function syncLocalStorageToCart(){  //لحظه ای که سایت باز میش�
 
 syncLocalStorageToCart();
 getProductList();
+// renderSumProducts();
 
 
-async function getProductList() {     //function 1
-
-    const response = await fetch("https://67024fa4bd7c8c1ccd3e809a.mockapi.io/api/v1/foodMenu");
-    const result = await response.json();
-    productList = await result;
-
-    renderProductList();
+async function getProductList() {
+    try {
+        const response = await fetch('https://67024fa4bd7c8c1ccd3e809a.mockapi.io/api/v1/foodMenu');
+        const result = await response.json();
+        productList = await result;
+        renderProductList();
+        renderCartBox();
+    }
+    catch (e) {
+        console.log(e);
+    }
 }
 
 
@@ -105,13 +127,15 @@ function openModalBox(index) {
 
     foodScoreModal.innerHTML = element.score;
 
+    renderFoodNumbersToModalBox(`${currentFoodId}`);
+
 
 }
 
 
 function addFoodToCart() {
 
-    if (cart.some(item => item.id ===  currentFoodId)) {
+    if (cart.some(item => item.id === currentFoodId)) {
         const finder = cart.find(item => item.id === currentFoodId)
         finder.count += 1;
     }
@@ -120,23 +144,132 @@ function addFoodToCart() {
     }
 
     syncCartToLocalStorage();
+    renderFoodNumbersToModalBox(`${currentFoodId}`);
+    renderCartBox();
+
 }
 
-function removeFoodFromCart(){
+function removeFoodFromCart() {
 
-    const finder = cart.find(item=> item.id === currentFoodId);
+    let finder = cart.find(item => item.id === currentFoodId);
 
-    if(finder?.count>1){
-        finder.count -=1;
+    if (finder?.count > 1) {
+        finder.count -= 1;
     }
 
-    else{
-        cart= cart.filter(item=> item.id !== currentFoodId);
+    else {
+        cart = cart.filter(item => item.id !== currentFoodId);
     }
 
     syncCartToLocalStorage();
+    renderFoodNumbersToModalBox(`${currentFoodId}`);
+    renderCartBox();
+
+
 }
 
-function closeModal(){
-    modalArea.style.display="none";
+function closeModal() {
+    modalArea.style.display = "none";
+}
+
+
+function renderFoodNumbersToModalBox(currentFoodId) {
+    let elem = cart.find(item => item.id === currentFoodId);
+    if (elem) {
+        numEachFoodModal.innerHTML = elem.count;
+    } else {
+        numEachFoodModal.innerHTML = 0;
+    }
+}
+
+function renderCartBox() {
+    
+if(cart.length >0){
+
+    cartBox.innerHTML = "";   
+    cart.forEach(cartItem => {  // توی سبد خرید فقط ایدی و تعداد هر محصول هست ولی اسم و قیمتشو هم باید داشته باشیم
+
+        const productData = productList.find(prod => prod.id === cartItem.id);
+
+        currentFoodId = cartItem.id;
+
+        cartBox.innerHTML += `
+
+        <div id="cart" class="w-full text-[#403379] font-bold px-[20px]"> 
+        
+        <div class="flex justify-between items-center">
+            <p>${productData.name}</p>
+            <svg onclick="renderDeleteFoodFromCartCompletely(${currentFoodId})" fill="#403379" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 512 512"
+                enable-background="new 0 0 512 512" xml:space="preserve">
+                <polygon points="335.188,154.188 256,233.375 176.812,154.188 154.188,176.812 233.375,256 154.188,335.188 176.812,357.812 
+256,278.625 335.188,357.812 357.812,335.188 278.625,256 357.812,176.812 " />
+                <path d="M256,0C114.609,0,0,114.609,0,256s114.609,256,256,256s256-114.609,256-256S397.391,0,256,0z M256,472
+c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,256,472z" />
+            </svg>
+        </div>
+        <div class="flex justify-between items-center">
+            <div class="flex gap-[5px] items-center">
+                <div><svg onclick="removeFoodFromCart()" width="20px" height="20px" viewBox="0 0 16 16" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M1 10L1 6L15 6V10L1 10Z" fill="#403379" />
+                    </svg></div>
+                <div> <span class="text-[20px]">${cartItem.count}</span></div>
+                <div><svg onclick="addFoodToCart()" width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1H6V6L1 6V10H6V15H10V10H15V6L10 6V1Z" fill="#403379" />
+                    </svg></div>
+            </div>
+            <div>
+                <span>${(productData.price * cartItem.count ).toFixed(2) }</span>
+            </div>
+
+        </div>
+        <hr class="w-full h-[3px]">
+    </div>
+        `;
+        
+    })
+
+    renderSumProducts();
+
+
+
+}
+    
+        else{
+            cartBox.innerHTML = `<div><svg width="50" height="50 " viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M0 1H15V10H4.60087L4.17982 12H12C13.1046 12 14 12.8954 14 14C14 15.1046 13.1046 16 12 16C10.8954 16 10 15.1046 10 14H6C6 15.1046 5.10457 16 4 16C2.89543 16 2 15.1046 2 14V12.6459L2.98262 7.97846L2.15287 3H0V1Z"
+                            fill="#402F88" />
+                    </svg></div>
+
+                <div class="flex flex-row justify-center items-center">
+                    <p class="text-[#402F88] font-bold text-[16px]">Your shopping cart is empty!</p>
+                </div>
+`;
+        }    
+}
+
+function renderDeleteFoodFromCartCompletely(foodId) {
+
+    cart = cart.filter(item => item.id !== foodId);
+
+}
+
+function renderSumProducts(){
+let price= 0;   //متوجه شدیم این عدده
+
+    cart.forEach(finalItem => {  
+        const productFinal = productList.find(prodFinal =>  prodFinal.id === finalItem.id);
+
+        price += parseFloat( `${productFinal.price * finalItem.count}` ) ;
+    
+        // currentFoodId = cartItem.id;
+        
+        // console.log( price);
+    
+    })
+
+    priceBeforeDiscount.innerHTML = `${price} $`;
+    taxPrice.innerHTML = `${(price * 0.09).toFixed(2)}`;
 }
