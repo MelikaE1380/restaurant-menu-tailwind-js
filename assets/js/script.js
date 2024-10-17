@@ -20,22 +20,25 @@ let priceBeforeDiscount = document.getElementById("price_before_discount");
 
 let taxPrice = document.getElementById("tax_price");
 
+
 let discountCodes = [
     {
-    code:"golden",
-    percent: 60
-},
+        code: "golden",
+        percent: 60
+    },
 
-{
-    code:"silver",
-    percent: 60
-}
+    {
+        code: "silver",
+        percent: 60
+    }
 
 ];
 
 let productList = [];
 
 let cart = [];
+
+
 
 let currentFoodId;
 
@@ -60,7 +63,7 @@ function syncLocalStorageToCart() {  //لحظه ای که سایت باز میش
 
 syncLocalStorageToCart();
 getProductList();
-// renderSumProducts();
+
 
 
 async function getProductList() {
@@ -110,7 +113,7 @@ function renderProductList() {    //function 2
 
 }
 
-function openModalBox(index) {
+function openModalBox(index) {     // اینجا باید اطلاعات محصول رو در باکس مدال وارد کنیم
 
     const element = productList[index];
 
@@ -133,7 +136,7 @@ function openModalBox(index) {
 }
 
 
-function addFoodToCart() {
+function addFoodToCart() {  // اضافه کردن از طریق مدال
 
     if (cart.some(item => item.id === currentFoodId)) {
         const finder = cart.find(item => item.id === currentFoodId)
@@ -173,7 +176,7 @@ function closeModal() {
 }
 
 
-function renderFoodNumbersToModalBox(currentFoodId) {
+function renderFoodNumbersToModalBox(currentFoodId) {   // currentFoodId: زمانی ساخته میشه که روی هر کارت کلیک میکنیم و مدال باز میشه
     let elem = cart.find(item => item.id === currentFoodId);
     if (elem) {
         numEachFoodModal.innerHTML = elem.count;
@@ -183,23 +186,23 @@ function renderFoodNumbersToModalBox(currentFoodId) {
 }
 
 function renderCartBox() {
-    
-if(cart.length >0){
 
-    cartBox.innerHTML = "";   
-    cart.forEach(cartItem => {  // توی سبد خرید فقط ایدی و تعداد هر محصول هست ولی اسم و قیمتشو هم باید داشته باشیم
+    if (cart.length > 0) {
 
-        const productData = productList.find(prod => prod.id === cartItem.id);
+        cartBox.innerHTML = "";
+        cart.forEach(cartItem => {  // توی سبد خرید فقط ایدی و تعداد هر محصول هست ولی اسم و قیمتشو هم باید داشته باشیم
 
-        currentFoodId = cartItem.id;
+      
+            const productData = productList.find(prod => prod.id === cartItem.id);
+           
 
-        cartBox.innerHTML += `
+            cartBox.innerHTML += `
 
         <div id="cart" class="w-full text-[#403379] font-bold px-[20px]"> 
         
         <div class="flex justify-between items-center">
             <p>${productData.name}</p>
-            <svg onclick="renderDeleteFoodFromCartCompletely(${currentFoodId})" fill="#403379" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+            <svg fill="#403379" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 512 512"
                 enable-background="new 0 0 512 512" xml:space="preserve">
                 <polygon points="335.188,154.188 256,233.375 176.812,154.188 154.188,176.812 233.375,256 154.188,335.188 176.812,357.812 
@@ -210,34 +213,35 @@ c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,
         </div>
         <div class="flex justify-between items-center">
             <div class="flex gap-[5px] items-center">
-                <div><svg onclick="removeFoodFromCart()" width="20px" height="20px" viewBox="0 0 16 16" fill="none"
+                <div><svg onclick="removeFoodViaCartBox(${cartItem.id})" width="20px" height="20px" viewBox="0 0 16 16" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 10L1 6L15 6V10L1 10Z" fill="#403379" />
                     </svg></div>
                 <div> <span class="text-[20px]">${cartItem.count}</span></div>
-                <div><svg onclick="addFoodToCart()" width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div><svg onclick="addFoodViaCartBox(${cartItem.id})" width="20px" height="20px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M10 1H6V6L1 6V10H6V15H10V10H15V6L10 6V1Z" fill="#403379" />
                     </svg></div>
             </div>
             <div>
-                <span>${(productData.price * cartItem.count ).toFixed(2) }</span>
+                <span>${(productData.price * cartItem.count).toFixed(2)}</span>
             </div>
 
         </div>
         <hr class="w-full h-[3px]">
     </div>
         `;
-        
-    })
-
-    renderSumProducts();
 
 
+        })
 
-}
-    
-        else{
-            cartBox.innerHTML = `<div><svg width="50" height="50 " viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        renderSumProducts();
+
+
+
+    }
+
+    else {
+        cartBox.innerHTML = `<div><svg width="50" height="50 " viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M0 1H15V10H4.60087L4.17982 12H12C13.1046 12 14 12.8954 14 14C14 15.1046 13.1046 16 12 16C10.8954 16 10 15.1046 10 14H6C6 15.1046 5.10457 16 4 16C2.89543 16 2 15.1046 2 14V12.6459L2.98262 7.97846L2.15287 3H0V1Z"
                             fill="#402F88" />
@@ -247,29 +251,72 @@ c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,
                     <p class="text-[#402F88] font-bold text-[16px]">Your shopping cart is empty!</p>
                 </div>
 `;
-        }    
+    }
 }
 
-function renderDeleteFoodFromCartCompletely(foodId) {
+function renderDeleteFoodFromCartCompletely(cartItem) {
 
-    cart = cart.filter(item => item.id !== foodId);
-
+    cart = cart.filter(item => item.id !== cartItem.Id);
+    renderCartBox();
 }
 
-function renderSumProducts(){
-let price= 0;   //متوجه شدیم این عدده
 
-    cart.forEach(finalItem => {  
-        const productFinal = productList.find(prodFinal =>  prodFinal.id === finalItem.id);
 
-        price += parseFloat( `${productFinal.price * finalItem.count}` ) ;
+function addFoodViaCartBox(cartItemId) {
+
+    let finder = cart.find(item => item.id == cartItemId);
     
-        // currentFoodId = cartItem.id;
-        
-        // console.log( price);
-    
+
+    if (finder) {
+        finder.count += 1;
+        syncCartToLocalStorage();
+        renderCartBox();
+    } else {
+        console.error('Item not found in cart:', cartItemId);
+    }
+    console.log(finder);
+}
+
+function removeFoodViaCartBox(cartItemId) {
+    let finder = cart.find(item => item.id == cartItemId);
+
+    if (finder) {
+        if (finder.count > 1) {
+            finder.count -= 1;
+            syncCartToLocalStorage();
+            renderCartBox();
+        } else {
+            cart = cart.filter(item => item.id !== cartItemId);
+            syncCartToLocalStorage();
+            renderCartBox();
+        }
+    } else {
+        console.error('Item not found in cart:', cartItemId);
+    }
+}
+
+
+
+function renderSumProducts() {
+    let price = 0;   //متوجه شدیم این عدده
+
+    cart.forEach(finalItem => {
+        const productFinal = productList.find(prodFinal => prodFinal.id === finalItem.id);
+        // console.log(productFinal.price);
+
+        price += parseFloat(`${productFinal.price * finalItem.count}`);
+
+
+
     })
 
     priceBeforeDiscount.innerHTML = `${price} $`;
     taxPrice.innerHTML = `${(price * 0.09).toFixed(2)}`;
+}
+
+
+function renderDiscountCode(){
+
+    
+
 }
