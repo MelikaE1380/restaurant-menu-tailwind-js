@@ -20,6 +20,13 @@ let priceBeforeDiscount = document.getElementById("price_before_discount");
 
 let taxPrice = document.getElementById("tax_price");
 
+let discountCodeInput = document.getElementById("discount_code_input");
+
+let submitDiscount = document.getElementById("submit_discount");
+
+let discountPriceTag = document.getElementById("discount_price");
+
+let totalAfterDiscountTax = document.getElementById("total_after_discount_tax");
 
 let discountCodes = [
     {
@@ -29,7 +36,7 @@ let discountCodes = [
 
     {
         code: "silver",
-        percent: 60
+        percent: 50
     }
 
 ];
@@ -192,9 +199,9 @@ function renderCartBox() {
         cartBox.innerHTML = "";
         cart.forEach(cartItem => {  // توی سبد خرید فقط ایدی و تعداد هر محصول هست ولی اسم و قیمتشو هم باید داشته باشیم
 
-      
+
             const productData = productList.find(prod => prod.id === cartItem.id);
-           
+
 
             cartBox.innerHTML += `
 
@@ -202,7 +209,7 @@ function renderCartBox() {
         
         <div class="flex justify-between items-center">
             <p>${productData.name}</p>
-            <svg fill="#403379" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+            <svg onclick="renderDeleteFoodFromCartCompletely(${cartItem.id})" fill="#403379" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                 xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 512 512"
                 enable-background="new 0 0 512 512" xml:space="preserve">
                 <polygon points="335.188,154.188 256,233.375 176.812,154.188 154.188,176.812 233.375,256 154.188,335.188 176.812,357.812 
@@ -235,13 +242,14 @@ c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,
         })
 
         renderSumProducts();
+        renderDiscountCode();
 
 
 
     }
 
     else {
-        cartBox.innerHTML = `<div><svg width="50" height="50 " viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        cartBox.innerHTML = `<div class="flex justify-center items-center"><svg width="50" height="50 " viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M0 1H15V10H4.60087L4.17982 12H12C13.1046 12 14 12.8954 14 14C14 15.1046 13.1046 16 12 16C10.8954 16 10 15.1046 10 14H6C6 15.1046 5.10457 16 4 16C2.89543 16 2 15.1046 2 14V12.6459L2.98262 7.97846L2.15287 3H0V1Z"
                             fill="#402F88" />
@@ -254,10 +262,14 @@ c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,
     }
 }
 
-function renderDeleteFoodFromCartCompletely(cartItem) {
+function renderDeleteFoodFromCartCompletely(cartItemId) {
 
-    cart = cart.filter(item => item.id !== cartItem.Id);
+console.log(cartItemId);
+    cart = cart.filter(item => +item.id !== +cartItemId);
+
     renderCartBox();
+    syncCartToLocalStorage();
+
 }
 
 
@@ -265,7 +277,7 @@ function renderDeleteFoodFromCartCompletely(cartItem) {
 function addFoodViaCartBox(cartItemId) {
 
     let finder = cart.find(item => item.id == cartItemId);
-    
+
 
     if (finder) {
         finder.count += 1;
@@ -297,8 +309,8 @@ function removeFoodViaCartBox(cartItemId) {
 
 
 
-function renderSumProducts() {
-    let price = 0;   //متوجه شدیم این عدده
+function calcSumPrice(){
+    let price = 0;
 
     cart.forEach(finalItem => {
         const productFinal = productList.find(prodFinal => prodFinal.id === finalItem.id);
@@ -310,13 +322,63 @@ function renderSumProducts() {
 
     })
 
-    priceBeforeDiscount.innerHTML = `${price} $`;
-    taxPrice.innerHTML = `${(price * 0.09).toFixed(2)}`;
+    return price;
+  
+
 }
 
-
-function renderDiscountCode(){
-
+function renderSumProducts() {
+    const price =calcSumPrice();
     
+    
+    priceBeforeDiscount.innerHTML = `${price} $`;
 
+    taxPrice.innerHTML = `${(price * 0.09).toFixed(2)} $`;
+
+    console.log(parseFloat(price * 1.09).toFixed(2));
+
+
+    totalAfterDiscountTax.innerHTML = `${(price * 0.09).toFixed(2) + price}`; ///فعلا اجرا میشه 
 }
+
+
+function renderDiscountCode() {
+
+const price = calcSumPrice();
+
+    discountCodes.forEach(item => {
+
+        if (discountCodeInput.value == item.code) {
+
+            discountPriceTag.innerHTML = "";
+            console.log(item.code);
+            let priceWithTax = (price * 1.09).toFixed(2);
+
+
+            let discountPrice = priceWithTax * ((item.percent) / 100);
+            console.log(discountPrice);
+
+            discountPriceTag.innerHTML += `${discountPrice.toFixed(2)} $`;
+
+            console.log(`${priceWithTax - discountPrice}$`);
+
+          
+
+            // totalAfterDiscountTax.innerHTML = `${priceWithTax - discountPrice}$ `;  ///این کار نمیکنه
+            totalAfterDiscountTax.innerHTML = `test`;
+
+        }
+
+
+        else {
+
+            priceWithTax = (price + (price * 0.09)).toFixed(2);
+            totalAfterDiscountTax.innerHTML = `${priceWithTax}$ `;
+        }
+    })
+    syncCartToLocalStorage();
+}
+
+
+
+

@@ -75,7 +75,7 @@
                     <input id="discount_code_input" type="text" placeholder="code"
                         class="w-[200px] h-[40px] rounded-[2rem] pl-[10px] focus:outline-none focus:ring-0">
 
-                    <div id="submit_discount"
+                    <div id="submit_discount" onclick="renderDiscountCode()"
                         class="w-[40px] h-[40px] bg-[#FFA600] flex justify-center items-center rounded-r-[2rem] absolute right-0">
 
                         <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none"
@@ -94,12 +94,12 @@
 
                     <p>Price:<span id="price_before_discount">0.00 $</span></p>
                     <p>Taxes:<span id="tax_price">0.00 $</span></p>
-                    <p>Discount:<span>0.00 $</span></p>
+                    <p>Discount:<span id="discount_price">0.00 $</span></p>
                 </div>
 
 
                 <div class="flex items-center mt-[20px]">
-                    <span class="text-white text-2xl font-bold">Total:</span><span
+                    <span class="text-white text-2xl font-bold">Total:</span><span id="total_after_discount_tax"
                         class="text-2xl font-bold text-[#76FF71]">0.00$</span>
 
                 </div>
@@ -139,7 +139,7 @@
                 </svg>
             </div>
             <div class="flex justify-center items-center text-2xl">
-                <p id="name_food_modal" class="text-3xl font-bold text-white mt-[80px]"></p>
+                <p id="name_food_modal" class="text-3xl flex justify-center items-center font-bold text-white mt-[100px] md:mt-[90px]"></p>
             </div>
             <div class="flex justify-center items-center gap-[50px] text-2xl text-white font-bold">
                 <div>
@@ -157,7 +157,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="flex flex-wrap items-center justify-center gap-[80px]">
+            <div class="flex flex-wrap items-center justify-center gap-[10px]">
                 <div class="w-[160px] h-[64px] bg-white relative rounded-[4rem] flex justify-around items-center">
                     <div class="rounded-full flex justify-center items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FF9A00"
