@@ -28,13 +28,16 @@
 
 
     <header
-        class="w-full h-[80px] bg-[#4F3D9C] flex justify-around gap-3 items-center text-2xl text-white font-bold md:text-3xl md:justify-between md:w-full md:h-[210px] md:items-start md:pl-[3%] lg:pl-[20%]">
+        class="w-full h-[80px] bg-[#4F3D9C] relative flex justify-around gap-[100px] items-center text-2xl text-white font-bold md:text-3xl md:justify-between md:w-full md:h-[210px] md:items-start ">
 
-        <div class="w-[100px] md:w-[300px] md:pt-[50px]">
-            <p>EAT HEALTHY</p>
+        <div class="w-[100px] md:w-[500px] md:pt-[50px]">
+            <p class="text-center">EAT HEALTHY</p>
         </div>
-        <div class="w-[100px] md:w-[300px] md:pt-[50px]">
-            <p>LIVE HEALTHY</p>
+        <div class="absolute top-[40px] right-[calc(50%-60px)] z-10 md:top-[85px] md:right-[calc(62.5vw-75px)] lg:right-[calc(62.5vw-100px)]  lg:top-[60px]">
+            <img src="./assets/img/header-img.png" class="w-[120px] md:w-[150px] lg:w-[200px]"  alt="">
+        </div>
+        <div class="w-[100px] md:w-[500px] md:pt-[50px]">
+            <p class="text-center">LIVE HEALTHY</p>
         </div>
         <div class="hidden h-[80px] md:block md:w-[40%] lg:w-[25%]"></div>
     </header>
@@ -42,7 +45,7 @@
     <main class="w-full flex flex-col md:flex-row md:h-[calc(100vh-140px)] md:absolute md:top-[140px] ">
 
         <div id="products-box"
-            class="w-full flex flex-row flex-wrap justify-center items-center gap-5 pb-[40px] overflow-y-auto h-[450px] bg-white md:h-full md:w-[60%] md:rounded-tl-[70px] lg:w-[75%]">
+            class="w-full flex flex-row flex-wrap justify-around items-center  pb-[40px] overflow-y-auto h-[450px] bg-white  md:h-full md:w-[60%] md:rounded-tl-[70px] lg:w-[75%]">
 
         </div>
 
@@ -106,9 +109,9 @@
 
                 <div class="flex justify-center items-center w-[100%] mt-[20px]">
 
-                    <div
+                    <div id="submit_button" onclick="submitOrder()"
                         class="w-[70%] h-[40px] bg-[#FFA600] mb-[35px] bg-[#FFA600] rounded-[50rem] flex justify-center items-center text-[#333333] font-bold text-xl">
-                        <p>Place Order</p>
+                        <p id="place_order">Place Order</p>
                     </div>
                 </div>
 
@@ -159,6 +162,20 @@
             </div>
             <div class="flex flex-wrap items-center justify-center gap-[10px]">
                 <div class="w-[160px] h-[64px] bg-white relative rounded-[4rem] flex justify-around items-center">
+                    
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FF9A00"
+                            onclick="removeFoodFromCart()" class="bi bi-dash-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
+                        </svg>
+                    </div>
+
+                    <div>
+                        <p id="num_each_food" class="text-2xl text-[#FF9A00]">0</p>
+                    </div>
+
+
                     <div class="rounded-full flex justify-center items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FF9A00"
                             onclick="addFoodToCart()" class="bi bi-plus-circle" viewBox="0 0 16 16">
@@ -167,20 +184,24 @@
                                 d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
                         </svg>
                     </div>
-                    <div>
-                        <p id="num_each_food" class="text-2xl text-[#FF9A00]">0</p>
-                    </div>
-                    <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FF9A00"
-                            onclick="removeFoodFromCart()" class="bi bi-dash-circle" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
-                        </svg>
-                    </div>
+
+
+
+                   
                 </div>
-                <div class="text-2xl text-white font-bold"><span>Total:</span><span class="text-[#B3FFB0]">$</span><span
+                <div class="text-2xl text-white font-bold"><span>Total:</span><span id="total_modal" class="text-[#B3FFB0]">$</span><span
                         id="total_price">0.00</span></div>
             </div>
+        </div>
+    </div>
+
+
+
+    <div id="submit_modal" class="fixed justify-center hidden items-center w-full h-screen -top-0 left-0 ">
+
+        <div id="submit_modal_box" class="relative flex justify-center bg-[#4F3D9C] rounded-[40px] items-center opacity-100 w-[70%] h-[90px] md:w-[30%]">
+                <p class="text-[#000000] font-bold text-2xl">Order Submited</p>
+                <svg fill="#5AF271" width="40px" height="40px" viewBox="0 0 16 16" id="Layer_1" xmlns="http://www.w3.org/2000/svg"><path class="cls-1" d="M14,4.69298L5.81846,12.87529l-3.81846-3.81846,1.63615-1.63692,2.25019,2.25019L12.43173,3.12471l1.56827,1.56827Z"/></svg>
         </div>
     </div>
 

@@ -28,6 +28,14 @@ let discountPriceTag = document.getElementById("discount_price");
 
 let totalAfterDiscountTax = document.getElementById("total_after_discount_tax");
 
+let submitButton = document.getElementById("submit_button");
+
+let submitModal = document.getElementById("submit_modal");
+
+let placeOrder = document.getElementById("place_order");
+
+let totalModal = document.getElementById("total_modal");
+
 let discountCodes = [
     {
         code: "golden",
@@ -107,8 +115,8 @@ function renderProductList() {    //function 2
                 <div class="foodDiv-right" >
                 
                 <div class="foodImage-div flex flex-col gap-[70px]" >
-                <div ><img class="foodImage" src="${item.image}"></div>
-                <div><span>0</span</div>
+                <div><img class="foodImage" src="${item.image}"></div>
+                <div class="count-food-list" id="count-food-${item.id}"><span>0</span</div>
                 </div>
                 
                 <div><span class="dollar-tag">$</span><span class="price-tag">${item.price}</span></div>
@@ -128,6 +136,7 @@ function openModalBox(index) {     // اینجا باید اطلاعات محص�
 
 
     modalArea.style.display = "flex";
+    modalArea.style.zIndex = 50;
 
     foodImageModal.src = element.image;
 
@@ -147,7 +156,9 @@ function addFoodToCart() {  // اضافه کردن از طریق مدال
 
     if (cart.some(item => item.id === currentFoodId)) {
         const finder = cart.find(item => item.id === currentFoodId)
+   
         finder.count += 1;
+
     }
     else {
         cart.push({ id: currentFoodId, count: 1 });
@@ -174,6 +185,7 @@ function removeFoodFromCart() {
     syncCartToLocalStorage();
     renderFoodNumbersToModalBox(`${currentFoodId}`);
     renderCartBox();
+    renderSumProducts();
 
 
 }
@@ -264,17 +276,21 @@ c-119.297,0-216-96.703-216-216S136.703,40,256,40s216,96.703,216,216S375.297,472,
 
 function renderDeleteFoodFromCartCompletely(cartItemId) {
 
-console.log(cartItemId);
+    console.log(cartItemId);
     cart = cart.filter(item => +item.id !== +cartItemId);
 
     renderCartBox();
     syncCartToLocalStorage();
+    renderSumProducts();
+    discountPriceTag.innerHTML = `0.00 $`;
+    
 
 }
 
 
 
 function addFoodViaCartBox(cartItemId) {
+    discountPriceTag.innerHTML = `0.00$`;
 
     let finder = cart.find(item => item.id == cartItemId);
 
@@ -290,6 +306,7 @@ function addFoodViaCartBox(cartItemId) {
 }
 
 function removeFoodViaCartBox(cartItemId) {
+    discountPriceTag.innerHTML = `0.00$`;
     let finder = cart.find(item => item.id == cartItemId);
 
     if (finder) {
@@ -309,42 +326,36 @@ function removeFoodViaCartBox(cartItemId) {
 
 
 
-function calcSumPrice(){
+function calcSumPrice() {
     let price = 0;
 
     cart.forEach(finalItem => {
         const productFinal = productList.find(prodFinal => prodFinal.id === finalItem.id);
-        // console.log(productFinal.price);
 
         price += parseFloat(`${productFinal.price * finalItem.count}`);
-
-
 
     })
 
     return price;
-  
 
 }
 
 function renderSumProducts() {
-    const price =calcSumPrice();
-    
-    
+    const price = calcSumPrice();
+
     priceBeforeDiscount.innerHTML = `${price} $`;
 
     taxPrice.innerHTML = `${(price * 0.09).toFixed(2)} $`;
 
-    console.log(parseFloat(price * 1.09).toFixed(2));
 
 
-    totalAfterDiscountTax.innerHTML = `${(price * 0.09).toFixed(2) + price}`; ///فعلا اجرا میشه 
+    totalAfterDiscountTax.innerHTML = `${(price * 1.09).toFixed(2)}`; 
 }
 
 
 function renderDiscountCode() {
 
-const price = calcSumPrice();
+    const price = calcSumPrice();
 
     discountCodes.forEach(item => {
 
@@ -352,31 +363,55 @@ const price = calcSumPrice();
 
             discountPriceTag.innerHTML = "";
             console.log(item.code);
-            let priceWithTax = (price * 1.09).toFixed(2);
+            
 
-
-            let discountPrice = priceWithTax * ((item.percent) / 100);
-            console.log(discountPrice);
+            let taxPrice = (price * 0.09 ).toFixed(2);  // محاسبه مالیات
+            let discountPrice = price * ((item.percent) / 100); // محاسبه تخفیف  
+            // console.log(discountPrice);
 
             discountPriceTag.innerHTML += `${discountPrice.toFixed(2)} $`;
 
-            console.log(`${priceWithTax - discountPrice}$`);
+            totalAfterDiscountTax.innerHTML = "";
 
-          
-
-            // totalAfterDiscountTax.innerHTML = `${priceWithTax - discountPrice}$ `;  ///این کار نمیکنه
-            totalAfterDiscountTax.innerHTML = `test`;
-
+            totalAfterDiscountTax.innerHTML = `${(+(price - discountPrice) + (+taxPrice)).toFixed(2)}$ `;  
+            
+            discountCodeInput.value="";
+        }
+        else{
+            discountCodeInput.value="";
         }
 
-
-        else {
-
-            priceWithTax = (price + (price * 0.09)).toFixed(2);
-            totalAfterDiscountTax.innerHTML = `${priceWithTax}$ `;
-        }
     })
     syncCartToLocalStorage();
+}
+
+
+
+function submitOrder(){
+
+    if(cart.length>0){
+        cart = [];
+        localStorage.clear();
+        submitButton.style.backgroundColor = "#76FF71";
+        placeOrder.innerHTML = "Order submitted";
+
+
+        setTimeout(function() {
+            placeOrder.innerHTML = "Place Order";
+            submitButton.style.backgroundColor = "#FFA600";
+        }, 4000);
+        
+        submitModal.style.display = "flex";
+        
+        setTimeout(function() {
+            submitModal.style.display = "none";
+        }, 4000);
+        
+        renderCartBox();
+        renderSumProducts();
+
+    }
+
 }
 
 
