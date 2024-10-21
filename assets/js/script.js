@@ -36,6 +36,8 @@ let placeOrder = document.getElementById("place_order");
 
 let totalModal = document.getElementById("total_modal");
 
+let totalPriceModal = document.getElementById("total_price_modal");
+
 let discountCodes = [
     {
         code: "golden",
@@ -116,17 +118,47 @@ function renderProductList() {    //function 2
                 
                 <div class="foodImage-div flex flex-col gap-[70px]" >
                 <div><img class="foodImage" src="${item.image}"></div>
-                <div class="count-food-list" id="count-food-${item.id}"><span>0</span</div>
+               <div class="count-food-list" id="count-food-${item.id}"></div>
+              <div class="food-countt" class="flex justify-center items-center w-[40px] h-[40px] rounded-full bg-[#FBD460]"> <span id="countt-${item.id}">0</span> </div>
                 </div>
+                 
                 
                 <div><span class="dollar-tag">$</span><span class="price-tag">${item.price}</span></div>
                 
                 </div>
                 
                 `
+        renderCountFood();
+
     })
 
 }
+
+
+function renderCountFood() {
+    productList.forEach(item => {
+        let countElement = document.getElementById(`countt-${item.id}`);
+        let cartItem = cart.find(food => food.id === item.id);
+        if (countElement) {
+            countElement.innerHTML = cartItem ? cartItem.count : 0;
+        }
+    });
+}
+
+
+
+function renderTotalInModal(foodId) {
+    let total = 0;
+    const cartItem = cart.find(item => item.id === foodId);
+    const productData = productList.find(prod => prod.id === foodId);
+
+    if (cartItem && productData) {
+        total = productData.price * cartItem.count;
+    }
+
+    totalPriceModal.innerHTML = `<div class="food-total"><span>${total.toFixed(2)} </span></div>`;
+}
+
 
 function openModalBox(index) {     // اینجا باید اطلاعات محصول رو در باکس مدال وارد کنیم
 
@@ -146,27 +178,31 @@ function openModalBox(index) {     // اینجا باید اطلاعات محص�
 
     foodScoreModal.innerHTML = element.score;
 
+
     renderFoodNumbersToModalBox(`${currentFoodId}`);
 
+    renderTotalInModal(currentFoodId);
 
 }
-
-
 function addFoodToCart() {  // اضافه کردن از طریق مدال
 
     if (cart.some(item => item.id === currentFoodId)) {
-        const finder = cart.find(item => item.id === currentFoodId)
-   
+        const finder = cart.find(item => item.id === currentFoodId);
+
         finder.count += 1;
 
     }
     else {
+
         cart.push({ id: currentFoodId, count: 1 });
+
     }
 
     syncCartToLocalStorage();
     renderFoodNumbersToModalBox(`${currentFoodId}`);
     renderCartBox();
+    renderCountFood();
+    renderTotalInModal(currentFoodId);
 
 }
 
@@ -186,6 +222,10 @@ function removeFoodFromCart() {
     renderFoodNumbersToModalBox(`${currentFoodId}`);
     renderCartBox();
     renderSumProducts();
+    renderCountFood();
+    renderTotalInModal();
+    renderTotalInModal(currentFoodId);
+
 
 
 }
@@ -282,8 +322,11 @@ function renderDeleteFoodFromCartCompletely(cartItemId) {
     renderCartBox();
     syncCartToLocalStorage();
     renderSumProducts();
+    renderCountFood();
+
+    renderTotalInModal(currentFoodId);
     discountPriceTag.innerHTML = `0.00 $`;
-    
+
 
 }
 
@@ -299,6 +342,9 @@ function addFoodViaCartBox(cartItemId) {
         finder.count += 1;
         syncCartToLocalStorage();
         renderCartBox();
+        renderCountFood();
+     
+        renderTotalInModal(currentFoodId);
     } else {
         console.error('Item not found in cart:', cartItemId);
     }
@@ -314,10 +360,13 @@ function removeFoodViaCartBox(cartItemId) {
             finder.count -= 1;
             syncCartToLocalStorage();
             renderCartBox();
+            renderCountFood();
         } else {
             cart = cart.filter(item => item.id !== cartItemId);
             syncCartToLocalStorage();
             renderCartBox();
+            renderCountFood();
+            renderTotalInModal(currentFoodId);
         }
     } else {
         console.error('Item not found in cart:', cartItemId);
@@ -349,7 +398,7 @@ function renderSumProducts() {
 
 
 
-    totalAfterDiscountTax.innerHTML = `${(price * 1.09).toFixed(2)}`; 
+    totalAfterDiscountTax.innerHTML = `${(price * 1.09).toFixed(2)}`;
 }
 
 
@@ -363,9 +412,9 @@ function renderDiscountCode() {
 
             discountPriceTag.innerHTML = "";
             console.log(item.code);
-            
 
-            let taxPrice = (price * 0.09 ).toFixed(2);  // محاسبه مالیات
+
+            let taxPrice = (price * 0.09).toFixed(2);  // محاسبه مالیات
             let discountPrice = price * ((item.percent) / 100); // محاسبه تخفیف  
             // console.log(discountPrice);
 
@@ -373,12 +422,12 @@ function renderDiscountCode() {
 
             totalAfterDiscountTax.innerHTML = "";
 
-            totalAfterDiscountTax.innerHTML = `${(+(price - discountPrice) + (+taxPrice)).toFixed(2)}$ `;  
-            
-            discountCodeInput.value="";
+            totalAfterDiscountTax.innerHTML = `${(+(price - discountPrice) + (+taxPrice)).toFixed(2)}$ `;
+
+            discountCodeInput.value = "";
         }
-        else{
-            discountCodeInput.value="";
+        else {
+            discountCodeInput.value = "";
         }
 
     })
@@ -387,29 +436,31 @@ function renderDiscountCode() {
 
 
 
-function submitOrder(){
+function submitOrder() {
 
-    if(cart.length>0){
+    if (cart.length > 0) {
         cart = [];
         localStorage.clear();
         submitButton.style.backgroundColor = "#76FF71";
         placeOrder.innerHTML = "Order submitted";
 
 
-        setTimeout(function() {
+        setTimeout(function () {
             placeOrder.innerHTML = "Place Order";
             submitButton.style.backgroundColor = "#FFA600";
         }, 4000);
-        
+
         submitModal.style.display = "flex";
-        
-        setTimeout(function() {
+
+        setTimeout(function () {
             submitModal.style.display = "none";
         }, 4000);
-        
+
         renderCartBox();
         renderSumProducts();
-
+        renderCountFood();
+        renderTotalInModal();
+        renderTotalInModal(currentFoodId);
     }
 
 }

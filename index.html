@@ -28,15 +28,16 @@
 
 
     <header
-        class="w-full h-[80px] bg-[#4F3D9C] relative flex justify-around gap-[100px] items-center text-2xl text-white font-bold md:text-3xl md:justify-between md:w-full md:h-[210px] md:items-start ">
+        class="w-full h-[80px] bg-[#4F3D9C] relative flex  justify-between gap-3 items-center  text-white font-bold md:text-3xl md:justify-between  md:w-full md:h-[210px] md:items-start ">
 
-        <div class="w-[100px] md:w-[500px] md:pt-[50px]">
+        <div class="w-[100px] text-lg md:w-[500px] md:pt-[50px] md:text-3xl">
             <p class="text-center">EAT HEALTHY</p>
         </div>
-        <div class="absolute top-[40px] right-[calc(50%-60px)] z-10 md:top-[85px] md:right-[calc(62.5vw-75px)] lg:right-[calc(62.5vw-100px)]  lg:top-[60px]">
-            <img src="./assets/img/header-img.png" class="w-[120px] md:w-[150px] lg:w-[200px]"  alt="">
+        <div
+            class="absolute top-[40px] right-[calc(50%-60px)] z-10 md:top-[85px] md:right-[calc(62.5vw-75px)] lg:right-[calc(62.5vw-100px)]  lg:top-[60px]">
+            <img src="./assets/img/header-img.png" class="w-[120px] md:w-[150px] lg:w-[200px]" alt="">
         </div>
-        <div class="w-[100px] md:w-[500px] md:pt-[50px]">
+        <div class="w-[100px] text-lg  md:w-[500px] md:pt-[50px]  md:text-3xl">
             <p class="text-center">LIVE HEALTHY</p>
         </div>
         <div class="hidden h-[80px] md:block md:w-[40%] lg:w-[25%]"></div>
@@ -54,7 +55,8 @@
             <div id="cart-box"
                 class="w-full pt-3 h-[100px] overflow-y-auto bg-gradient-to-r from-[#FFAF10] to-[#FFCD44]  md:h-[20%]">
 
-                <div class="flex justify-center w-full"><svg width="50" height="50 " viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <div class="flex justify-center w-full"><svg width="50" height="50 " viewBox="0 0 16 16" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M0 1H15V10H4.60087L4.17982 12H12C13.1046 12 14 12.8954 14 14C14 15.1046 13.1046 16 12 16C10.8954 16 10 15.1046 10 14H6C6 15.1046 5.10457 16 4 16C2.89543 16 2 15.1046 2 14V12.6459L2.98262 7.97846L2.15287 3H0V1Z"
                             fill="#402F88" />
@@ -141,8 +143,8 @@
                     </g>
                 </svg>
             </div>
-            <div class="flex justify-center items-center text-2xl">
-                <p id="name_food_modal" class="text-3xl flex justify-center items-center font-bold text-white mt-[100px] md:mt-[90px]"></p>
+            <div class="flex justify-center items-center text-2xl mt-[100px] md:mt-[90px]">
+                <p id="name_food_modal" class="text-3xl text-center font-bold text-white "></p>
             </div>
             <div class="flex justify-center items-center gap-[50px] text-2xl text-white font-bold">
                 <div>
@@ -162,7 +164,7 @@
             </div>
             <div class="flex flex-wrap items-center justify-center gap-[10px]">
                 <div class="w-[160px] h-[64px] bg-white relative rounded-[4rem] flex justify-around items-center">
-                    
+
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="#FF9A00"
                             onclick="removeFoodFromCart()" class="bi bi-dash-circle" viewBox="0 0 16 16">
@@ -187,10 +189,10 @@
 
 
 
-                   
+
                 </div>
-                <div class="text-2xl text-white font-bold"><span>Total:</span><span id="total_modal" class="text-[#B3FFB0]">$</span><span
-                        id="total_price">0.00</span></div>
+                <div class="text-2xl text-white font-bold flex"><span>Total:</span><span id="total_modal"
+                        class="text-[#B3FFB0]">$</span><span id="total_price_modal">0.00</span></div>
             </div>
         </div>
     </div>
@@ -199,9 +201,14 @@
 
     <div id="submit_modal" class="fixed justify-center hidden items-center w-full h-screen -top-0 left-0 ">
 
-        <div id="submit_modal_box" class="relative flex justify-center bg-[#4F3D9C] rounded-[40px] items-center opacity-100 w-[70%] h-[90px] md:w-[30%]">
-                <p class="text-[#000000] font-bold text-2xl">Order Submited</p>
-                <svg fill="#5AF271" width="40px" height="40px" viewBox="0 0 16 16" id="Layer_1" xmlns="http://www.w3.org/2000/svg"><path class="cls-1" d="M14,4.69298L5.81846,12.87529l-3.81846-3.81846,1.63615-1.63692,2.25019,2.25019L12.43173,3.12471l1.56827,1.56827Z"/></svg>
+        <div id="submit_modal_box"
+            class="relative flex justify-center bg-[#4F3D9C] rounded-[40px] items-center opacity-100 w-[70%] h-[90px] md:w-[30%]">
+            <p class="text-[#000000] font-bold text-2xl">Order Submited</p>
+            <svg fill="#5AF271" width="40px" height="40px" viewBox="0 0 16 16" id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg">
+                <path class="cls-1"
+                    d="M14,4.69298L5.81846,12.87529l-3.81846-3.81846,1.63615-1.63692,2.25019,2.25019L12.43173,3.12471l1.56827,1.56827Z" />
+            </svg>
         </div>
     </div>
 
@@ -213,7 +220,7 @@
 
 
 
-    
+
 
 </body>
 

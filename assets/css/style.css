@@ -36,7 +36,18 @@
     font-size: large;
     font-weight: 700;
 }
-
+.food-countt{
+    position: absolute;
+    top: 130px;
+    right: 65px;
+    width: 30px;
+    height: 30px;
+    background-color: #FBD460;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+}
 
 .foodDiv-left {
     display: flex;
@@ -137,6 +148,13 @@ height: 400px;
     }
   }
 
+  @media only screen and (min-width: 640px) {
+    .foodDiv {
+      width: 40%;
+     }
+ 
+
+   }
   
 
    @media only screen and (min-width: 768px) {
